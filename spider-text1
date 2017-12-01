@@ -1,0 +1,31 @@
+#encodeing:utf-8
+import requests
+import json
+from bs4 import BeautifulSoup
+
+def main():
+    headers = {
+        'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36',
+        'Host':'www.lagou.com',
+        'Referer':'https://www.lagou.com/jobs/list_python?px=default&city=%E5%8C%97%E4%BA%AC',
+        'X-Anit-Forge-Code':'0',
+        'X-Anit-Forge-Token':'None',
+        'X-Requested-With':'XMLHttpRequest'
+    }
+
+    form_data ={
+        'first':'true',
+        'pn':'1',
+        'kd':'python'
+    }
+    result = requests.post('https://www.lagou.com/jobs/positionAjax.json?px=default&city=%E5%8C%97%E4%BA%AC&needAddtionalResult=false&isSchoolJob=0',headers=headers,data=form_data)
+    json_result = result.json()
+    positions = json_result['content']['positionResult']['result']
+    line = json.dumps(positions,ensure_ascii=False)
+    with open('lagou.json','w') as fp:
+        fp.write(line.encode('utf-8'))
+
+
+
+if __name__=='__main__':
+    main()
